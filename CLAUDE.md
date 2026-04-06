@@ -77,7 +77,7 @@ Vision lives in OCR-docs `docs/VISION.md` only.
 
 ## CCR Protocol
 
-All production-grade decisions follow the CCR (Critical, Conservative, Recursive) protocol. See `ourSharedEvents/.claude/skills/ccr-protocol.knowledge.md` for full spec.
+All production-grade decisions follow the CCR (Critical, Conservative, Recursive) protocol. See `OCR-docs/skills/ccr-protocol.knowledge.md` for full spec. Also available locally at `.ocr-standards/skills/` after propagation.
 
 ---
 
