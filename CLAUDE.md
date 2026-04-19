@@ -22,7 +22,7 @@ This repo is currently documentation-as-code. Developer tooling and franchise do
 | Full name | OurSharedMagnets |
 | Type | Developer and franchise layer |
 | Data model | API documentation, Postman collections, runbooks |
-| Dependencies | OSE (platform), OWL (deployment), all products (franchise knowledge) |
+| Dependencies | OSE (platform), OA (deployment), all products (franchise knowledge) |
 | Status | Documentation-as-code |
 
 ---
@@ -41,7 +41,7 @@ This repo is currently documentation-as-code. Developer tooling and franchise do
 
 - Platform infrastructure (OSE)
 - Game night format (OSG)
-- Client deployment and forking (OWL)
+- Client deployment and forking (OA)
 - Music curation (OW)
 - Consulting relationships (OSP)
 - Analytics and intelligence (OER)
@@ -50,14 +50,14 @@ This repo is currently documentation-as-code. Developer tooling and franchise do
 
 ## Key distinction
 
-OSM is knowledge transfer. OWL is deployment execution. OSM tells you how. OWL sets up the environment. They work together but own different things.
+OSM is knowledge transfer. OA is deployment execution. OSM tells you how. OA sets up the environment. They work together but own different things.
 
 ---
 
 ## Architectural boundaries
 
 - **OSE is the platform.** OSM documents its APIs, does not build them.
-- **OWL handles deployment.** OSM documents the process; OWL executes the fork, environment setup, and onboarding.
+- **OA handles deployment.** OSM documents the process; OA executes the fork, environment setup, and onboarding.
 - **OSM serves corridor operators.** The audience is the person running activations in a new geography, not the end user at the event.
 - **Postman/Newman collections mirror OSE routes.** Every OSE API endpoint has a corresponding Postman request. Newman runs them in CI.
 

@@ -15,7 +15,7 @@ API and white label support. Postman collections. Newman CI. Ritual execution sk
 | Code | Product | Relationship |
 |------|---------|-------------|
 | OSE | OurSharedEvents | OSM documents and tests OSE's APIs |
-| OWL | OurWhiteList | OSM provides knowledge, OWL provides deployment |
+| OA | OurAirwaves | OSM provides knowledge, OA provides deployment |
 | OSG | OurSharedGames | Franchise docs include game night operations |
 | OSR | OurSharedRecords | Franchise docs include archive processes |
 | OSP | OurSharedPulse | Consulting knowledge feeds franchise documentation |
