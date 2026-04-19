@@ -14,6 +14,11 @@ permissions:
   pull-requests: write
   issues: write
 
+# Pin bash for self-hosted Windows runner (default would be PowerShell).
+defaults:
+  run:
+    shell: bash
+
 jobs:
   contract-check:
     name: Validate against OCR-docs brain
@@ -51,7 +56,7 @@ jobs:
         id: conformance
         working-directory: ${{ github.workspace }}
         run: |
-          python3 ose/.github/scripts/check_brain_contract.py \
+          python3 osm/.github/scripts/check_brain_contract.py \
             --brain ocr-docs/ocr-docs-brain \
             --repo osm \
             --product-id osm \
@@ -75,7 +80,7 @@ jobs:
           COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
           REPO_NAME: ${{ github.repository }}
         run: |
-          python3 ose/.github/scripts/open_drift_ticket.py \
+          python3 osm/.github/scripts/open_drift_ticket.py \
             --report conformance-report.json \
             --repo "$REPO_NAME" \
             --pr-number "$PR_NUMBER" \
