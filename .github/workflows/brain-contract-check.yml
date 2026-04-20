@@ -60,7 +60,7 @@ jobs:
         working-directory: ocr-docs/ocr-docs-brain
         run: python3 tests/run_all.py
 
-      - name: Run OSE contract conformance
+      - name: Run OSM contract conformance
         id: conformance
         working-directory: ${{ github.workspace }}
         run: |
