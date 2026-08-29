@@ -15,7 +15,7 @@ on:
     paths: ['**/*.md', '.github/workflows/docs-ci.yml']
   workflow_dispatch:
 
-# Pin bash for self-hosted Windows runner (default would be PowerShell).
+# Pin bash explicitly (harmless on ubuntu-latest, whose default is already bash) so run steps are shell-deterministic regardless of runner.
 defaults:
   run:
     shell: bash
@@ -23,7 +23,7 @@ defaults:
 jobs:
   lint-and-check:
     name: Markdown lint + DAC compliance
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
