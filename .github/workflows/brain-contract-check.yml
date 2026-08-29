@@ -14,7 +14,7 @@ permissions:
   pull-requests: write
   issues: write
 
-# Pin bash for self-hosted Windows runner (default would be PowerShell).
+# Pin bash explicitly (harmless on ubuntu-latest, whose default is already bash) so run steps are shell-deterministic regardless of runner.
 defaults:
   run:
     shell: bash
@@ -22,7 +22,7 @@ defaults:
 jobs:
   contract-check:
     name: Validate against OCR-docs brain
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 5
 
     steps:
