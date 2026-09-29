@@ -1,0 +1,60 @@
+# Design system check (ADR-008, ratified 2026-09-29).
+#
+# @ocr/ui in the hub monorepo is the single source of tokens and styles. This
+# repo pins the exact hub commit it builds against in .ocr-hub-ref, and this job
+# runs that commit's check-spoke-styles gate: it fails if this repo adds its own
+# tokens, stylesheet, raw colours or foreign stylesheets. Recorded debt lives in
+# .ocr-design-check.json and may only shrink.
+name: Design system check
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  design-check:
+    name: No spoke-owned tokens or stylesheet (@ocr/ui, pinned)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+        with:
+          path: spoke
+
+      - name: Read the pinned hub commit
+        id: pin
+        run: |
+          ref="$(tr -d '[:space:]' < spoke/.ocr-hub-ref)"
+          if ! [[ "$ref" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error file=.ocr-hub-ref::must hold one full 40-character hub commit SHA, got '$ref'"
+            exit 1
+          fi
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+          echo "Pinned hub commit: $ref"
+
+      - name: Checkout @ocr/ui at the pinned commit
+        uses: actions/checkout@v4
+        with:
+          repository: ourCommunityRituals/ourCommunityRituals
+          ref: ${{ steps.pin.outputs.ref }}
+          path: hub
+          token: ${{ secrets.OCR_PROPAGATE_TOKEN }}
+          sparse-checkout: packages/ui
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check this repo carries no design of its own
+        run: node hub/packages/ui/scripts/check-spoke-styles.mjs --root spoke
