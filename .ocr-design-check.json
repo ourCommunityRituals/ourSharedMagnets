@@ -1,0 +1,6 @@
+{
+  "include": ["**/*.html", "**/*.css", "**/*.jsx", "**/*.tsx"],
+  "exclude": [],
+  "inlineStyleBudget": 400,
+  "baseline": {}
+}
