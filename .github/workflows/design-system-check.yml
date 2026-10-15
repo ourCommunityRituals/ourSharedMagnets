@@ -48,7 +48,7 @@ jobs:
           repository: ourCommunityRituals/ourCommunityRituals
           ref: ${{ steps.pin.outputs.ref }}
           path: hub
-          token: ${{ secrets.OCR_PROPAGATE_TOKEN }}
+          token: ${{ secrets.OCR_HUB_READ }}
           sparse-checkout: packages/ui
           persist-credentials: false
 
