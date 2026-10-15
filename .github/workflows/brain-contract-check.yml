@@ -37,7 +37,7 @@ jobs:
           repository: ourCommunityRituals/OCR-docs
           path: ocr-docs
           ref: main
-          token: ${{ secrets.OCR_PROPAGATE_TOKEN }}
+          token: ${{ secrets.OCR_HUB_READ }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
