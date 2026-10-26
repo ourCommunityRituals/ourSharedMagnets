@@ -14,7 +14,7 @@ permissions:
   pull-requests: write
   issues: write
 
-# Pin bash explicitly (harmless on ubuntu-latest, whose default is already bash) so run steps are shell-deterministic regardless of runner.
+# Pin bash explicitly (harmless on ubuntu-24.04, whose default is already bash) so run steps are shell-deterministic regardless of runner.
 defaults:
   run:
     shell: bash
@@ -22,7 +22,7 @@ defaults:
 jobs:
   contract-check:
     name: Validate against OCR-docs brain
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
 
     steps:
