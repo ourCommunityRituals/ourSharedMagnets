@@ -1,0 +1,57 @@
+# .github/workflows/config-check.yml
+# Checks config/magnets.config.yaml
+# against ourSharedMagnets' rails, then against the brain (data-edges.yaml and
+# product-registry.yaml, read live from OCR-docs main). The born-red tests run first,
+# so a check that can no longer fail turns this job red.
+
+name: Config check
+
+on:
+  pull_request:
+    paths: ['config/**', 'scripts/**', '.github/workflows/config-check.yml']
+  push:
+    branches: [main]
+    paths: ['config/**', 'scripts/**', '.github/workflows/config-check.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  config-check:
+    name: ourSharedMagnets config rails
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout ourSharedMagnets
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          path: osm
+
+      - name: Checkout OCR-docs brain (read-only)
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: ourCommunityRituals/OCR-docs
+          path: ocr-docs
+          ref: main
+          token: ${{ secrets.OCR_HUB_READ }}
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install pyyaml
+
+      - name: Born-red tests for the check
+        working-directory: osm
+        run: python3 -m unittest discover -s scripts/tests -v
+
+      - name: Check the config against the rails and the brain
+        working-directory: osm
+        run: python3 scripts/check-config.py --brain ../ocr-docs/ocr-docs-brain

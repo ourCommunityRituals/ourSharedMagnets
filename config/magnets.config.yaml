@@ -1,0 +1,107 @@
+# ============================================================================
+# ourSharedMagnets (OSM) config: the developer and franchise layer's rails
+# ============================================================================
+# One file that says what OSM points at and what it may do: which product APIs
+# its collections mirror, which environment they run against, what demo and
+# mock data may hold, what OSM may one day send to ourEventRings, and where
+# the franchise knowledge lives. `python3 scripts/check-config.py` must pass.
+#
+# OSM is on the anonymous side (data-edges.yaml node `osm`). It documents and
+# tests other products' APIs; it never owns their routes or their data.
+# OSM tells you how; ourAirwaves (OA) does the deployment. A client's tier and
+# limits live in ourAirwaves config/airwaves.config.yaml, not here.
+#
+# Status: documents only (product-registry.yaml `code_present: false`).
+# ============================================================================
+
+schema_version: 1.0.0
+last_reviewed: 2026-11-26
+
+app:
+  id: osm                       # product id in data-edges.yaml and product-registry.yaml
+  name: ourSharedMagnets
+  side: anonymous
+  code_present: false
+
+# ── Environments ─────────────────────────────────────────────────────────────
+# Collections run against staging, the environment of record (owner standing
+# order, 2026-11-14). Production stays closed.
+environments:
+  staging:
+    enabled: true
+    ose_base_url: https://stg.oursharedevents.com
+    ow_base_url: https://stg.ourwkrp.com
+  production:
+    enabled: false
+    ose_base_url: https://oursharedevents.com
+    ow_base_url: https://ourwkrp.com
+
+# ── The APIs OSM documents and tests ─────────────────────────────────────────
+# The product's route table is the source of truth; OSM mirrors it.
+# `auth_secret` is the NAME of a secret, never its value.
+api_sources:
+  ose:
+    route_table: ourSharedEvents workers/oursharedevents/src/router.ts (header comment)
+    collections: ourSharedEvents bruno/ (ose-api, ose-pages, ose-sharedreport)
+    auth_secret: ADMIN_KEY      # staging-only Bearer fallback (OSE AGENTS.md, Architecture)
+  ow:
+    route_table: ourWKRP src/router.ts (header comment)
+    collections: ourWKRP bruno/ (wkrp-api, wkrp-api-reference)
+    auth_secret: null           # the public catalog API needs no key
+  oaw:
+    route_table: none yet       # ourAirwaves has no app; its routes are planned in its config
+    collections: none yet
+    auth_secret: null
+
+# The collection tool. OSM's CLAUDE.md still says Postman and Newman; both
+# products moved to Bruno (OW: "ex-Newman"). Drift to fix in CLAUDE.md by a
+# reviewed PR; this file records what the products use today.
+collection_tool: bruno
+
+# ── Mock and demo data ───────────────────────────────────────────────────────
+# Anything OSM builds to show or test the platform.
+mock_data:
+  people: synthetic_only        # never a real person; the private showcase exception stays out of this repo
+  real_venues_allowed: true     # venues are places, not people
+  counts_follow_under_5_floor: true   # a demo count below 5 reads "Fewer than 5", never the number
+  location: h3_cell_only        # place, not person: res 7 or res 9, never coordinates of a person
+  never_contains:
+    - attendee_name
+    - attendee_email
+    - phone
+    - raw_anon_id
+    - ip_address
+    - request_geo
+
+# ── Telemetry to ourEventRings (edge E4) ─────────────────────────────────────
+# Written in the boundary doc (section 4.4); deferred until OSM is active.
+telemetry:
+  edge: E4
+  enabled: false                # contract_only; turning it on needs code and an edge status change in OCR-docs
+  allowed_fields:
+    - api_key_hash              # opaque hash, never the raw key
+    - ritual_type
+    - period_bucket
+    - call_count
+    - franchise_id              # opaque
+    - corridor_id
+    - deployment_tier
+    - active_since
+
+# ── Franchise knowledge ──────────────────────────────────────────────────────
+franchise:
+  corridors_source: OCR-docs ocr-docs-brain/corridor-definitions.yaml   # confidential; point to it, never copy it here
+  playbook_dir: docs/playbook
+  ritual_skills_dir: docs/skills
+  api_docs_dir: docs/api
+  deployment_handled_by: oaw    # OSM documents the process; ourAirwaves runs it
+  tiers_source: ourAirwaves config/airwaves.config.yaml
+
+# Never tier-gated, at any level, in anything OSM documents.
+never_tier_gated:
+  - security
+  - audit
+  - isolation
+  - retention
+  - under_5_floor
+  - colours_and_contrast
