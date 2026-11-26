@@ -31,6 +31,7 @@ API and white label support. Postman collections. Newman CI. Ritual execution sk
 | CLAUDE.md | `CLAUDE.md` | Session protocol for AI-assisted work |
 | SKILL.md | `SKILL.md` | Reusable skills for OSM work |
 | VISION.md | `OCR-docs/docs/VISION.md` | Org-level source of truth |
+| Config | `config/magnets.config.yaml` | What OSM points at and may do, checked on every PR |
 
 ---
 
