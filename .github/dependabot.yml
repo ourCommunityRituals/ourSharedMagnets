@@ -1,7 +1,6 @@
-# Keeps every pinned action current (from the 25 Nov 2026 security review and the
-# AI Problems Index assessment). Workflows pin actions by full commit SHA with the
-# tag as a comment; Dependabot proposes the new SHA when the tag moves, so a pin
-# changes only through a reviewed PR, never through a moved tag.
+# Keeps every pinned action current. Workflows pin actions by full commit SHA
+# with the tag as a comment; Dependabot proposes the new SHA when the tag moves,
+# so a pin changes only through a reviewed PR, never through a moved tag.
 version: 2
 updates:
   - package-ecosystem: github-actions
